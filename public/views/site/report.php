@@ -1,4 +1,5 @@
 <?php
+
     use app\components\access\Admin;
     use app\models\Hardware;
     use app\models\HwDepart;
@@ -24,23 +25,21 @@
 
     $_fio = ArrayHelper::map($user_model->getUsers(), 'id', 'username');
 
-    $template = isset($_GET['template']) ? $_GET['template'] : '';
-    $id_org = isset($_GET['id_org']) ? $_GET['id_org'] : '';
+    $template = $_GET['template'] ?? '';
+    $id_org = $_GET['id_org'] ?? '';
 
     $_hw_depart = ArrayHelper::map(HwDepart::find()->where(['type' => HwDepart::TYPE_PARENT_DEPART])->all(), 'id', 'name');
 
-    $model_list = isset($_GET['model_list']) ? $_GET['model_list'] : null;
-
-    $date_ct_to = isset($_GET['date_ct_to']) ? $_GET['date_ct_to'] : '';
-    $date_ct_do = isset($_GET['date_ct_do']) ? $_GET['date_ct_do'] : '';
-    $date_upd_to = isset($_GET['date_upd_to']) ? $_GET['date_upd_to'] : '';
-    $date_upd_do = isset($_GET['date_upd_do']) ? $_GET['date_upd_do'] : '';
+    $model_list = $_GET['model_list'] ?? null;
+    $date_ct_to = $_GET['date_ct_to'] ?? '';
+    $date_ct_do = $_GET['date_ct_do'] ?? '';
+    $date_upd_to = $_GET['date_upd_to'] ?? '';
+    $date_upd_do = $_GET['date_upd_do'] ?? '';
 
     $_depart_id = array();
 
     if ($id_org) {
         $hw_podr = HwPodr::find()->where(['id' => HwTehnic::getIdDepartList($id_org)])->orderBy(['name' => SORT_DESC])->all();
-
         $_depart = ArrayHelper::map($hw_podr, 'id', 'name');
         $_depart_id = ArrayHelper::map($hw_podr, 'id_depart', 'name');
     }
@@ -55,7 +54,7 @@
     $d_v = ArrayHelper::map($_sett, 'tb3', 'tb3');
 ?>
 
-<?= \app\components\template\ReportTemplate::widget()?>
+<?= \app\components\template\ReportTemplate::widget() ?>
 
 <div class="row justify-content-md-center">
 
@@ -63,14 +62,13 @@
         <?php
             $column = [
                 ['class' => 'yii\grid\SerialColumn'],
-
             ];
 
             $id = [
                 'attribute' => 'id',
                 'value' => function ($model) {
                     $old_pass = isset($model->old_passport) ? "({$model->old_passport})" : '';
-                    return HwTehnic::getPassport($model->id).$old_pass;
+                    return HwTehnic::getPassport($model->id) . $old_pass;
                 },
             ];
 
@@ -86,7 +84,6 @@
             $serial = [
                 'attribute' => 'serial',
                 'filterInputOptions' => ['class' => 'form-control']
-
             ];
 
             $username = [
@@ -101,10 +98,10 @@
                 'attribute' => 'date_ct',
                 'filter' => DatePicker::widget([
                     'name' => 'date_ct_to',
-                    'value' => $date_ct_to ? date('Y-m-d',$date_ct_to) : '',
+                    'value' => $date_ct_to ? date('Y-m-d', $date_ct_to) : '',
                     'type' => DatePicker::TYPE_RANGE,
                     'name2' => 'date_ct_do',
-                    'value2' => $date_ct_do ? date('Y-m-d',$date_ct_do) : '',
+                    'value2' => $date_ct_do ? date('Y-m-d', $date_ct_do) : '',
                     'separator' => '-',
                     'pluginOptions' => ['format' => 'yyyy-mm-dd', 'allowClear' => true]
                 ]),
@@ -117,10 +114,10 @@
                 'attribute' => 'date_upd',
                 'filter' => DatePicker::widget([
                     'name' => 'date_upd_to',
-                    'value' => $date_upd_to ? date('Y-m-d',$date_upd_to) : '',
+                    'value' => $date_upd_to ? date('Y-m-d', $date_upd_to) : '',
                     'type' => DatePicker::TYPE_RANGE,
                     'name2' => 'date_upd_do',
-                    'value2' => $date_upd_do ? date('Y-m-d',$date_upd_do) : '',
+                    'value2' => $date_upd_do ? date('Y-m-d', $date_upd_do) : '',
                     'separator' => '-',
                     'pluginOptions' => ['format' => 'yyyy-mm-dd', 'allowClear' => true]
                 ]),
@@ -149,7 +146,7 @@
                 'attribute' => 'id_model',
                 'filter' => $_model,
                 'value' => function ($model) {
-                    return isset($model->model->name) ?$model->model->name : '';
+                    return isset($model->model->name) ? $model->model->name : '';
                 },
             ];
 
@@ -207,6 +204,15 @@
                 },
             ];
 
+            $verification = [
+                'attribute' => 'verification',
+                'label' => 'Верификация',
+                'filter' => HwTehnic::getVerifictaion(),
+                'value' => function ($model) {
+                    return $model->verification ? HwTehnic::getVerifictaion()[$model->verification] : null;
+                },
+            ];
+
             $user_depart = [
                 'attribute' => 'user_depart',
                 'label' => 'Отдел',
@@ -215,7 +221,6 @@
                     return isset($model->user->depart->name) ? $model->user->depart->name : '';
                 },
             ];
-
 
             in_array('id', $d_v) ? $column[] = $id : null;
             in_array('id_org', $d_v) ? $column[] = $org : null;
@@ -236,10 +241,9 @@
             in_array('date_warranty', $d_v) ? $column[] = $date_warranty : null;
             in_array('depart', $d_v) ? $column[] = $user_depart : null;
             in_array('hw_depart', $d_v) ? $column[] = $hw_depart : null;
+            in_array('verification', $d_v) ? $column[] = $verification : null;
 
-
-
-            if ($model_list and !$template){
+            if ($model_list and !$template) {
                 $column[] = $id;
                 $column[] = $org;
 //                $column[] = $serial;
@@ -259,7 +263,6 @@
 
 
             if ($d_v or $model_list) {
-
 
                 echo '
 

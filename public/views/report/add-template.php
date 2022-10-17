@@ -80,10 +80,6 @@
 
 
     <?php foreach ($default_value as $item): ?>
-
-
-        <!--        --><?php //if ($item->tb2 == 'ram' ? array_key_exists($item->tb3, $field_ram) : array_key_exists($item->tb3, $field_tehnic)): ?>
-
         <div class="row mt-2">
                 <label for=""><?= $item->tb2 == 'ram' ? $field_ram[$item->tb3] : $field_tehnic[$item->tb3] ?></label>
                 <?php if ($item->tb2 == 'ram' ? array_key_exists($item->tb3, $field_ram_dr) : array_key_exists($item->tb3, $field_ram_tehnic)): ?>
@@ -108,10 +104,6 @@
                            data-parent="report" id="<?= $item->id ?>" value="<?= $item->tb4 ?>">
                 <?php endif; ?>
         </div>
-
-
-        <!--        --><?php //endif; ?>
-
     <?php endforeach; ?>
 <?php endif; ?>
 <!--    Устанавливаем занчение по умолчания для отчета     -->

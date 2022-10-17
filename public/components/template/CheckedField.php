@@ -22,10 +22,7 @@
 
         public function run()
         {
-
             $field = new HwSettings();
-
-
 
             return $this->render('checked-field', [
                 'field_list' => $field->getTehnicTableField(),

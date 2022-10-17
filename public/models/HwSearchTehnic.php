@@ -38,7 +38,7 @@
         public function rules()
         {
             return [
-                [['id', 'id_wh', 'id_user', 'name', 'balance', 'id_model', 'category', 'type', 'status', 'user_depart', 'id_org', 'hw_depart'], 'integer'],
+                [['id', 'id_wh', 'id_user', 'name', 'balance', 'id_model', 'category', 'type', 'status', 'user_depart', 'id_org', 'hw_depart', 'verification'], 'integer'],
                 [['location', 'serial', 'nomen', 'act_num'], 'string'],
                 [['date_admission', 'date_warranty'], 'date'],
             ];
@@ -106,8 +106,6 @@
         {
             $this->load($params);
 
-
-
             $template = isset($_GET['template']) ? $_GET['template'] : null;
             
             if ($template) {
@@ -156,6 +154,7 @@
                 $this->date_warranty = $this->issetValueField('date_warranty', $d_v);
                 $this->date_ct = $this->issetValField('date_ct', $d_v);
                 $this->date_upd = $this->issetValField('date_upd', $d_v);
+//                $this->verification = $this->issetValField('verification', $d_v);
             }
 
             $query = HwTehnic::find()
@@ -233,6 +232,9 @@
             if ($this->type)
                 $query->andFilterWhere(['hw_device_type.id' => explode(',', $this->type)]);
 
+            if ($this->verification)
+                $query->andFilterWhere(['hw_tehnic.verification' => explode(',', $this->verification)]);
+
 
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
@@ -241,9 +243,6 @@
                 ],
             ]);
 
-
             return $dataProvider;
         }
-
-
     }

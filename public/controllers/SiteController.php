@@ -79,6 +79,17 @@
             ];
         }
 
+
+		  public function actionTehnicUpdate($id){
+				unset($_GET['id']);
+				if($tehnic = HwTehnic::findOne($id)){
+					foreach($_GET as $key => $item){
+						$tehnic->$key = $item;
+					}
+					$tehnic->save();
+				}
+		  }
+
         /**
          * Displays homepage.
          *
